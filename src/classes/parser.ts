@@ -50,10 +50,6 @@ export class Parser {
     parseFrames(): void {
         const handledActors = new Set<number>();
 
-        console.log(
-            this.replay.boxcarsReplay.network_frames.frames[this.replay.boxcarsReplay.network_frames.frames.length - 1],
-        );
-
         for (const [frameNumber, frame] of this.replay.boxcarsReplay.network_frames.frames.entries()) {
             for (const deletedActor of frame.deleted_actors) {
                 this.actors.delete(deletedActor);
@@ -104,8 +100,5 @@ export class Parser {
                 if (actor.handler) actor.handler.handleActor(this, actor, frameNumber, frame.time, frame.delta);
             }
         }
-
-        // console.log(this.actors.get(1)!.deltaAttributes);
-        // console.log(this.actors.get(5));
     }
 }
