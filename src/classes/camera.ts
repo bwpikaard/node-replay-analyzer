@@ -8,13 +8,7 @@ export class CameraSettings extends BaseHandler {
         return objectName === "TAGame.Default__CameraSettingsActor_TA";
     }
 
-    static handleActor(
-        parser: Parser,
-        actor: Actor,
-        frameNumber: number,
-        frameTime: number,
-        frameTimeDelta: number,
-    ): void {
+    static handleActor(parser: Parser, actor: Actor): void {
         if (!actor.hasAttribute("TAGame.CameraSettingsActor_TA:PRI")) return;
 
         const player = parser.actorIdToPlayerMap.get(actor.getAttribute("TAGame.CameraSettingsActor_TA:PRI").actor);
