@@ -216,6 +216,20 @@ export interface TAGame_GameEvent_TA_ReplicatedRoundCountDownNumber extends Boxc
     attribute: number;
 }
 
+export interface TAGame_PRI_TA_PartyLeader extends BoxcarsUpdatedActor {
+    object_name: "TAGame.PRI_TA:PartyLeader";
+    attribute: {
+        system_id: number;
+        remote_id: {Steam: string} | {Epic: string};
+        local_id: number;
+    };
+}
+
+export interface TAGame_Team_TA_ClubID extends BoxcarsUpdatedActor {
+    object_name: "TAGame.Team_TA:ClubID";
+    attribute: string;
+}
+
 export type UpdatedActor =
     | TAGame_GameEvent_TA_BotSkill
     | TAGame_Ball_TA_GameEvent
@@ -244,7 +258,9 @@ export type UpdatedActor =
     | ProjectX_GRI_X_ReplicatedServerRegion
     | ProjectX_GRI_X_ReplicatedGamePlaylist
     | TAGame_GameEvent_Soccar_TA_SecondsRemaining
-    | TAGame_GameEvent_TA_ReplicatedRoundCountDownNumber;
+    | TAGame_GameEvent_TA_ReplicatedRoundCountDownNumber
+    | TAGame_PRI_TA_PartyLeader
+    | TAGame_Team_TA_ClubID;
 
 export type ActorObject<T extends UpdatedActor = UpdatedActor> = T["object_name"];
 export type ActorAttribute<T extends UpdatedActor = UpdatedActor> = T["attribute"];

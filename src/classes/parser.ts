@@ -103,7 +103,7 @@ export class Parser {
             }
         }
 
-        console.log(this.actors.get(1)!.deltaAttributes);
+        // console.log(this.actors.get(1)!.deltaAttributes);
         // console.log(this.actors.get(5));
     }
 }

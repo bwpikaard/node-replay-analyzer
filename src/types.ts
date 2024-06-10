@@ -54,10 +54,18 @@ export interface ITeamColors {
     orangeColor: number;
 }
 
+export interface IPartyLeader {
+    name: string | null;
+    platform: string;
+    platformId: string;
+}
+
 export interface IPlayer {
     name: string;
     platform: string;
     platformId: string;
+    partyLeader: IPartyLeader | null;
+    clubId: string | null;
 }
 
 export interface ITeamPlayer extends IPlayer {

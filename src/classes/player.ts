@@ -1,4 +1,4 @@
-import type {ICarData} from "../types";
+import type {ICarData, IPartyLeader} from "../types";
 import {assertHasBeenDefined, type IPlayer, type ITeamPlayer} from "../types";
 import {type ActorAttribute, type Engine_PlayerReplicationInfo_UniqueId} from "../updated-actors";
 import type {Actor} from "./actor";
@@ -19,6 +19,10 @@ export class Player extends BaseHandler {
     private _shots: number = 0;
 
     private _saves: number = 0;
+
+    private _partyLeader: IPartyLeader | undefined;
+
+    private _clubId: string | undefined;
 
     public carData = new Map<number, ICarData>();
 
@@ -60,6 +64,14 @@ export class Player extends BaseHandler {
         return this._saves;
     }
 
+    public get partyLeader(): IPartyLeader | undefined {
+        return this._partyLeader;
+    }
+
+    public get clubId(): string | undefined {
+        return this._clubId;
+    }
+
     public set team(v: Team | undefined) {
         this._team = v;
     }
@@ -84,6 +96,14 @@ export class Player extends BaseHandler {
         this._saves = v;
     }
 
+    public set partyLeader(v: IPartyLeader) {
+        this._partyLeader = v;
+    }
+
+    public set clubId(v: string) {
+        this._clubId = v;
+    }
+
     toJSON(teamPlayer: true): ITeamPlayer;
 
     toJSON(teamPlayer: false): IPlayer;
@@ -93,6 +113,8 @@ export class Player extends BaseHandler {
             name: this.name,
             platform: this.platform,
             platformId: this.platformId,
+            partyLeader: this.partyLeader ?? null,
+            clubId: this.clubId ?? null,
         };
         if (teamPlayer) {
             assertHasBeenDefined(this.team, "player.toJSON.team");
@@ -166,6 +188,20 @@ export class Player extends BaseHandler {
 
             parser.actorIdToPlayerMap.set(actor.actorId, player);
         }
+
+        /* ------------- Party Leader ------------- */
+        if (actor.hasAttribute("TAGame.PRI_TA:PartyLeader")) {
+            const partyLeaderPlatform = Player.parsePlatform(actor.getAttribute("TAGame.PRI_TA:PartyLeader"));
+            const foundPlayer = Player.findPlayerByPlatform(
+                parser,
+                partyLeaderPlatform.platform,
+                partyLeaderPlatform.platformId,
+            );
+            player.partyLeader = {name: foundPlayer?.name ?? null, ...partyLeaderPlatform};
+        }
+
+        /* ------------- Club ------------- */
+        if (actor.hasAttribute("TAGame.Team_TA:ClubID")) player.clubId = actor.getAttribute("TAGame.Team_TA:ClubID");
 
         /* ------------- Assign Team ------------- */
         if (actor.hasAttribute("Engine.PlayerReplicationInfo:Team")) {

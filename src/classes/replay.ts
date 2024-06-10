@@ -53,45 +53,47 @@ export class Replay {
         const rawBoxcars = parse_replay_network(data);
         const boxcarsJSON = JSON.parse(new TextDecoder().decode(rawBoxcars));
         const validatedData = BoxcarsReplaySchema.parse(boxcarsJSON);
-        writeFile(
-            join(__dirname, "..", "test.json"),
-            `[\n${validatedData.network_frames.frames
-                .flatMap((frame, frameNumber) => [
-                    frame.new_actors
-                        .map(na =>
-                            JSON.stringify({
-                                type: "new",
-                                fn: frameNumber,
-                                actorId: na.actor_id,
-                                object: validatedData.objects[na.object_id],
-                                name: validatedData.names[na.name_id],
-                            }),
-                        )
-                        .join(",\n"),
-                    frame.updated_actors
-                        .map(ua =>
-                            JSON.stringify({
-                                type: "updated",
-                                fn: frameNumber,
-                                actorId: ua.actor_id,
-                                object: validatedData.objects[ua.object_id],
-                                data: ua.attribute,
-                            }),
-                        )
-                        .join(",\n"),
-                    frame.deleted_actors
-                        .map(da =>
-                            JSON.stringify({
-                                type: "deleted",
-                                fn: frameNumber,
-                                actorId: da,
-                            }),
-                        )
-                        .join(",\n"),
-                ])
-                .filter(f => !!f)
-                .join(",\n")}\n]`,
-        );
+
+        // writeFile(
+        //     join(__dirname, "..", "test.json"),
+        //     `[\n${validatedData.network_frames.frames
+        //         .flatMap((frame, frameNumber) => [
+        //             frame.new_actors
+        //                 .map(na =>
+        //                     JSON.stringify({
+        //                         type: "new",
+        //                         fn: frameNumber,
+        //                         actorId: na.actor_id,
+        //                         object: validatedData.objects[na.object_id],
+        //                         name: validatedData.names[na.name_id],
+        //                     }),
+        //                 )
+        //                 .join(",\n"),
+        //             frame.updated_actors
+        //                 .map(ua =>
+        //                     JSON.stringify({
+        //                         type: "updated",
+        //                         fn: frameNumber,
+        //                         actorId: ua.actor_id,
+        //                         object: validatedData.objects[ua.object_id],
+        //                         data: ua.attribute,
+        //                     }),
+        //                 )
+        //                 .join(",\n"),
+        //             frame.deleted_actors
+        //                 .map(da =>
+        //                     JSON.stringify({
+        //                         type: "deleted",
+        //                         fn: frameNumber,
+        //                         actorId: da,
+        //                     }),
+        //                 )
+        //                 .join(",\n"),
+        //         ])
+        //         .filter(f => !!f)
+        //         .join(",\n")}\n]`,
+        // );
+
         return new Replay(validatedData).toJSON();
     }
 }
