@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "ESNext",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "skipLibCheck": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "incremental": true,
+        "moduleResolution": "node",
+        "lib": [
+            "ESNext",
+            "ESNext.AsyncIterable",
+        ],
+        "strictNullChecks": true,
+        "strict": true,
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src/**/*",
+        "src/*",
+        "create/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

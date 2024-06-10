@@ -1,0 +1,27 @@
+{
+    "name": "gcs-rl-parser",
+    "private": true,
+    "scripts": {
+        "start": "node-dev ./src/test.ts",
+        "dev": "node-dev ./src/test.ts --watch",
+        "build:wasm": "wasm-pack build -t nodejs crate"
+    },
+    "dependencies": {
+        "boxcars-wasm": "file:crate/pkg",
+        "date-fns": "^3.6.0",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@types/node": "^20.12.12",
+        "@typescript-eslint/eslint-plugin": "^7.10.0",
+        "@typescript-eslint/parser": "^7.10.0",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-simple-import-sort": "^12.1.0",
+        "node-dev": "^8.0.0",
+        "prettier": "^3.2.5",
+        "prettier-eslint": "^16.3.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5"
+    }
+}
