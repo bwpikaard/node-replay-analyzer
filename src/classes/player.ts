@@ -1,4 +1,4 @@
-import type {ICarData, IPartyLeader} from "../types";
+import type {ICameraSettings, ICarData, IPartyLeader} from "../types";
 import {assertHasBeenDefined, type IPlayer, type ITeamPlayer} from "../types";
 import {type ActorAttribute, type Engine_PlayerReplicationInfo_UniqueId} from "../updated-actors";
 import type {Actor} from "./actor";
@@ -23,6 +23,10 @@ export class Player extends BaseHandler {
     private _partyLeader: IPartyLeader | undefined;
 
     private _clubId: string | undefined;
+
+    private _cameraSettings: ICameraSettings | undefined;
+
+    public ping: number[] = [];
 
     public carData = new Map<number, ICarData>();
 
@@ -72,6 +76,10 @@ export class Player extends BaseHandler {
         return this._clubId;
     }
 
+    public get cameraSettings(): ICameraSettings | undefined {
+        return this._cameraSettings;
+    }
+
     public set team(v: Team | undefined) {
         this._team = v;
     }
@@ -104,6 +112,10 @@ export class Player extends BaseHandler {
         this._clubId = v;
     }
 
+    public set cameraSettings(v: ICameraSettings) {
+        this._cameraSettings = v;
+    }
+
     toJSON(teamPlayer: true): ITeamPlayer;
 
     toJSON(teamPlayer: false): IPlayer;
@@ -115,9 +127,15 @@ export class Player extends BaseHandler {
             platformId: this.platformId,
             partyLeader: this.partyLeader ?? null,
             clubId: this.clubId ?? null,
+            ping: {
+                min: Math.min(...this.ping),
+                max: Math.max(...this.ping),
+                avg: this.ping.reduce((p, c) => p + c, 0) / this.ping.length,
+            },
         };
         if (teamPlayer) {
             assertHasBeenDefined(this.team, "player.toJSON.team");
+            assertHasBeenDefined(this.cameraSettings, "player.toJSON.player.cameraSettings");
 
             const otherTeam = this.team.color === "blue" ? this.parser.orangeTeam : this.parser.blueTeam;
             const teamPlayer: ITeamPlayer = {
@@ -137,6 +155,7 @@ export class Player extends BaseHandler {
                         taken: this.demos.taken.map(demo => demo.attacker.name),
                     },
                 },
+                camera: this.cameraSettings,
             };
             return teamPlayer;
         } else {
@@ -241,5 +260,11 @@ export class Player extends BaseHandler {
 
         if (actor.hasAttribute("TAGame.PRI_TA:MatchSaves"))
             player.saves = actor.getAttribute("TAGame.PRI_TA:MatchSaves");
+
+        /* ------------- Ping ------------- */
+        if (actor.hasAttribute("Engine.PlayerReplicationInfo:Ping")) {
+            player.ping.push(actor.getAttribute("Engine.PlayerReplicationInfo:Ping"));
+            actor.deleteAttribute("Engine.PlayerReplicationInfo:Ping");
+        }
     }
 }

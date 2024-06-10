@@ -60,12 +60,29 @@ export interface IPartyLeader {
     platformId: string;
 }
 
+export interface ICameraSettings {
+    fov: number;
+    height: number;
+    angle: number;
+    distance: number;
+    stiffness: number;
+    swivel: number;
+    transition: number;
+}
+
+export interface IPing {
+    min: number;
+    max: number;
+    avg: number;
+}
+
 export interface IPlayer {
     name: string;
     platform: string;
     platformId: string;
     partyLeader: IPartyLeader | null;
     clubId: string | null;
+    ping: IPing;
 }
 
 export interface ITeamPlayer extends IPlayer {
@@ -76,6 +93,7 @@ export interface ITeamPlayer extends IPlayer {
             taken: string[];
         };
     };
+    camera: ICameraSettings;
 }
 
 export interface ITeamJoin {

@@ -2,6 +2,7 @@ import {assertHasBeenDefined, type ITeamJoin} from "../types";
 import type {ActorObject} from "../updated-actors";
 import {Actor} from "./actor";
 import type {BaseHandler} from "./base-handler";
+import {CameraSettings} from "./camera";
 import {Car} from "./car";
 import {Game} from "./game";
 import {GameEvent} from "./game-event";
@@ -9,12 +10,9 @@ import {Player} from "./player";
 import type {Replay} from "./replay";
 import {Team} from "./team";
 
-export const Handlers: Array<typeof BaseHandler> = [Game, GameEvent, Team, Player, Car];
+export const Handlers: Array<typeof BaseHandler> = [Game, GameEvent, Team, Player, Car, CameraSettings];
 
-const TrackDeltas: Array<ActorObject> = [
-    "Engine.PlayerReplicationInfo:Team",
-    "TAGame.GameEvent_Soccar_TA:SecondsRemaining",
-];
+const TrackDeltas: Array<ActorObject> = [];
 
 export class Parser {
     public game = new Game();
@@ -51,6 +49,10 @@ export class Parser {
 
     parseFrames(): void {
         const handledActors = new Set<number>();
+
+        console.log(
+            this.replay.boxcarsReplay.network_frames.frames[this.replay.boxcarsReplay.network_frames.frames.length - 1],
+        );
 
         for (const [frameNumber, frame] of this.replay.boxcarsReplay.network_frames.frames.entries()) {
             for (const deletedActor of frame.deleted_actors) {

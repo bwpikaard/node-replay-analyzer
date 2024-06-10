@@ -28,6 +28,11 @@ export interface Engine_PlayerReplicationInfo_UniqueId extends BoxcarsUpdatedAct
     };
 }
 
+export interface Engine_PlayerReplicationInfo_Ping extends BoxcarsUpdatedActor {
+    object_name: "Engine.PlayerReplicationInfo:Ping";
+    attribute: number;
+}
+
 export interface Engine_PlayerReplicationInfo_Team extends BoxcarsUpdatedActor {
     object_name: "Engine.PlayerReplicationInfo:Team";
     attribute: {
@@ -230,11 +235,33 @@ export interface TAGame_Team_TA_ClubID extends BoxcarsUpdatedActor {
     attribute: string;
 }
 
+export interface TAGame_CameraSettingsActor_TA_PRI extends BoxcarsUpdatedActor {
+    object_name: "TAGame.CameraSettingsActor_TA:PRI";
+    attribute: {
+        active: boolean;
+        actor: number;
+    };
+}
+
+export interface TAGame_CameraSettingsActor_TA_ProfileSettings extends BoxcarsUpdatedActor {
+    object_name: "TAGame.CameraSettingsActor_TA:ProfileSettings";
+    attribute: {
+        fov: number;
+        height: number;
+        angle: number;
+        distance: number;
+        stiffness: number;
+        swivel: number;
+        transition: number;
+    };
+}
+
 export type UpdatedActor =
     | TAGame_GameEvent_TA_BotSkill
     | TAGame_Ball_TA_GameEvent
     | Engine_PlayerReplicationInfo_PlayerName
     | Engine_PlayerReplicationInfo_UniqueId
+    | Engine_PlayerReplicationInfo_Ping
     | Engine_PlayerReplicationInfo_Team
     | Engine_TeamInfo_Score
     | TAGame_Team_TA_ClubColors
@@ -260,7 +287,9 @@ export type UpdatedActor =
     | TAGame_GameEvent_Soccar_TA_SecondsRemaining
     | TAGame_GameEvent_TA_ReplicatedRoundCountDownNumber
     | TAGame_PRI_TA_PartyLeader
-    | TAGame_Team_TA_ClubID;
+    | TAGame_Team_TA_ClubID
+    | TAGame_CameraSettingsActor_TA_PRI
+    | TAGame_CameraSettingsActor_TA_ProfileSettings;
 
 export type ActorObject<T extends UpdatedActor = UpdatedActor> = T["object_name"];
 export type ActorAttribute<T extends UpdatedActor = UpdatedActor> = T["attribute"];
